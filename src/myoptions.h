@@ -18,6 +18,7 @@
 #define TFT_CS			    22
 #define BRIGHTNESS_PIN			32
 
+#define VS1053_CS           255 // disable vs1053
 #define I2S_DOUT			25
 #define I2S_BCLK			27
 #define I2S_LRC			    26
@@ -39,5 +40,7 @@
 #define TS_MODEL			TS_MODEL_XPT2046
 #define TS_CS			    4
 
+// ex-options
+#define VOLUME_STEP 3 // 1 is default
 
 #endif

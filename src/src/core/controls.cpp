@@ -459,7 +459,7 @@ void controlsEvent(bool toRight, int8_t volDelta) {
     //display.putRequest(NEWMODE, VOL);
 #endif
     if (volDelta != 0) {
-      int nv = config.store.volume + volDelta;
+      int nv = config.store.volume + volDelta * VOLUME_STEP;
       if (nv < 0) nv = 0;
       if (nv > 254) nv = 254;
       player.setVol((uint8_t)nv);
