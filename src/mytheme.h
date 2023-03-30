@@ -38,7 +38,7 @@
 //#define COLOR_VOLBAR_IN         189, 189, 189     /*  volume bar fill                                           */
 //#define COLOR_DIGITS            100, 100, 255     /*  volume / station number                                   */
 //#define COLOR_DIVIDER             0, 255,   0     /*  divider color (DSP_ST7789, DSP_ILI9341, DSP_ILI9225)      */
-#define COLOR_BITRATE             250, 250, 100     /*  bitrate                                                   */
+#define COLOR_BITRATE             165, 162, 132     /*  bitrate                                                   */
 #define COLOR_PL_CURRENT          255, 215,   0     /*  playlist current item                                     */
 #define COLOR_PL_CURRENT_BG         0,   0,   0     /*  playlist current item background                          */
 #define COLOR_PL_CURRENT_FILL       0,   0,   0     /*  playlist current item fill background                     */
