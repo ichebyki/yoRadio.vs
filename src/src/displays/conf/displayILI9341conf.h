@@ -16,9 +16,15 @@
 
 /* SROLLS  */                            /* {{ left, top, fontsize, align }, buffsize, uppercase, width, scrolldelay, scrolldelta, scrolltime } */
 const ScrollConfig metaConf       PROGMEM = {{ TFT_FRAMEWDT, TFT_FRAMEWDT, 3, WA_LEFT }, 140, true, MAX_WIDTH, 5000, 2, 30 };
+#ifdef BITRATE_FULL
+const ScrollConfig title1Conf     PROGMEM = {{ TFT_FRAMEWDT, 50, 2, WA_LEFT }, 140, true, MAX_WIDTH - 22, 5000, 2, 30 };
+const ScrollConfig title2Conf     PROGMEM = {{ TFT_FRAMEWDT, 70, 2, WA_LEFT }, 140, true, MAX_WIDTH - 22, 5000, 2, 30 };
+const ScrollConfig playlistConf   PROGMEM = {{ TFT_FRAMEWDT, 112, 2, WA_LEFT }, 140, true, MAX_WIDTH - 22, 1000, 2, 30 };
+#else
 const ScrollConfig title1Conf     PROGMEM = {{ TFT_FRAMEWDT, 50, 2, WA_LEFT }, 140, true, MAX_WIDTH, 5000, 2, 30 };
 const ScrollConfig title2Conf     PROGMEM = {{ TFT_FRAMEWDT, 70, 2, WA_LEFT }, 140, true, MAX_WIDTH, 5000, 2, 30 };
 const ScrollConfig playlistConf   PROGMEM = {{ TFT_FRAMEWDT, 112, 2, WA_LEFT }, 140, true, MAX_WIDTH, 1000, 2, 30 };
+#endif
 const ScrollConfig apTitleConf    PROGMEM = {{ TFT_FRAMEWDT, TFT_FRAMEWDT, 3, WA_CENTER }, 140, false, MAX_WIDTH, 0, 2, 20 };
 const ScrollConfig apSettConf     PROGMEM = {{ TFT_FRAMEWDT, 240-TFT_FRAMEWDT-16, 2, WA_LEFT }, 140, false, MAX_WIDTH, 0, 2, 30 };
 const ScrollConfig weatherConf    PROGMEM = {{ 8, 87, 2, WA_LEFT }, 140, true, MAX_WIDTH, 0, 4, 30 };
@@ -32,8 +38,10 @@ const FillConfig  playlBGConf     PROGMEM = {{ 0, 107, 0, WA_LEFT }, DSP_WIDTH, 
 const FillConfig  heapbarConf     PROGMEM = {{ 0, 239, 0, WA_LEFT }, DSP_WIDTH, 1, false };
 
 /* WIDGETS  */                           /* { left, top, fontsize, align } */
-const WidgetConfig bootstrConf    PROGMEM = { 0, 182, 1, WA_CENTER };
-const WidgetConfig bitrateConf    PROGMEM = { DSP_WIDTH - 100, 214, 1, WA_LEFT };
+const WidgetConfig  bootstrConf     PROGMEM = { 0, 182, 1, WA_CENTER };
+const WidgetConfig  bitrateConf     PROGMEM = { DSP_WIDTH - 100, 214, 1, WA_LEFT };
+const BitrateConfig fullbitrateConf PROGMEM = {{DSP_WIDTH-TFT_FRAMEWDT-19, 50, 1, WA_LEFT}, 22 };
+
 const WidgetConfig voltxtConf     PROGMEM = { 0, 214, 1, WA_CENTER };
 const WidgetConfig  iptxtConf     PROGMEM = { TFT_FRAMEWDT, 214, 1, WA_LEFT };
 const WidgetConfig   rssiConf     PROGMEM = { TFT_FRAMEWDT, 214-6, 2, WA_RIGHT };

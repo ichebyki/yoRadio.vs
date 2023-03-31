@@ -3786,6 +3786,9 @@ bool Audio:: initializeDecoder(){
             if(!MP3Decoder_AllocateBuffers()) goto exit;
             AUDIO_INFO("MP3Decoder has been initialized, free Heap: %u bytes", ESP.getFreeHeap());
             InBuff.changeMaxBlockSize(m_frameSizeMP3);
+            if(audio_codec) {
+                audio_codec("MP3");
+            }
             break;
         case CODEC_AAC:
             if(!AACDecoder_IsInit()){
@@ -3793,12 +3796,18 @@ bool Audio:: initializeDecoder(){
                 AUDIO_INFO("AACDecoder has been initialized, free Heap: %u bytes", ESP.getFreeHeap());
                 InBuff.changeMaxBlockSize(m_frameSizeAAC);
             }
+            if (audio_codec) {
+                audio_codec("AAC");
+            }
             break;
         case CODEC_M4A:
             if(!AACDecoder_IsInit()){
                 if(!AACDecoder_AllocateBuffers()) goto exit;
                 AUDIO_INFO("AACDecoder has been initialized, free Heap: %u bytes", ESP.getFreeHeap());
                 InBuff.changeMaxBlockSize(m_frameSizeAAC);
+            }
+            if (audio_codec) {
+                audio_codec("AAC");
             }
             break;
         case CODEC_FLAC:
@@ -3809,17 +3818,29 @@ bool Audio:: initializeDecoder(){
             if(!FLACDecoder_AllocateBuffers()) goto exit;
             InBuff.changeMaxBlockSize(m_frameSizeFLAC);
             AUDIO_INFO("FLACDecoder has been initialized, free Heap: %u bytes", ESP.getFreeHeap());
+            if (audio_codec) {
+                audio_codec("FLAC");
+            }
             break;
         case CODEC_WAV:
             InBuff.changeMaxBlockSize(m_frameSizeWav);
+            if (audio_codec) {
+                audio_codec("WAV");
+            }
             break;
         case CODEC_OGG:
             m_codec = CODEC_OGG;
             AUDIO_INFO("ogg not supported");
             AUDIO_ERROR("ogg not supported");
+            if (audio_codec) {
+                audio_codec("OGG");
+            }
             goto exit;
             break;
         default:
+            if (audio_codec) {
+                audio_codec("");
+            }
             goto exit;
             break;
     }

@@ -41,6 +41,8 @@
 #define TS_CS			    4
 
 // ex-options
-#define VOLUME_STEP 3 // 1 is default
+#define VOLUME_STEP   3 // 1 is default
+#define BUFLEN      190
+#define BITRATE_FULL  1
 
 #endif

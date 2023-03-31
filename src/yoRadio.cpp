@@ -123,6 +123,14 @@ void audio_bitrate(const char *info)
   netserver.requestOnChange(BITRATE, 0);
 }
 
+void audio_codec(const char *info) {
+  if (config.store.audioinfo)
+    telnet.printf("%s %s\n", "##AUDIO.CODEC#:", info);
+  strncpy(config.station.codec, info, sizeof(config.station.codec) - 1);
+  display.putRequest(DBITRATE);
+  netserver.requestOnChange(BITRATE, 0);
+}
+
 bool printable(const char *info) {
   bool p = true;
   for (int c = 0; c < strlen(info); c++)

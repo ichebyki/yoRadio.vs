@@ -82,6 +82,7 @@ extern __attribute__((weak)) void audio_eof_mp3(const char*); //end of mp3 file
 extern __attribute__((weak)) void audio_showstreamtitle(const char*);
 extern __attribute__((weak)) void audio_showstation(const char*);
 extern __attribute__((weak)) void audio_bitrate(const char*);
+extern __attribute__((weak)) void audio_codec(const char *);
 extern __attribute__((weak)) void audio_commercial(const char*);
 extern __attribute__((weak)) void audio_icyurl(const char*);
 extern __attribute__((weak)) void audio_icydescription(const char*);

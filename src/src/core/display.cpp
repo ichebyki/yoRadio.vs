@@ -379,8 +379,22 @@ void Display::loop() {
           snprintf(buf, 20, bitrateFmt, config.station.bitrate); 
           if(_bitrate) { _bitrate->setText(config.station.bitrate==0?"":buf); } 
           if(_fullbitrate) { 
-            _fullbitrate->setBitrate(config.station.bitrate); 
-            _fullbitrate->setFormat(BF_MP3); 
+            _fullbitrate->setBitrate(config.station.bitrate);
+            if (config.station.codec) {
+              if (strstr(config.station.codec, "MP3")) {
+                _fullbitrate->setFormat(BF_MP3);
+              } else if (strstr(config.station.codec, "AAC")) {
+                _fullbitrate->setFormat(BF_AAC);
+              } else if (strstr(config.station.codec, "FLAC")) {
+                _fullbitrate->setFormat(BF_FLAC);
+              } else if (strstr(config.station.codec, "WAV")) {
+                _fullbitrate->setFormat(BF_WAV);
+              } else if (strstr(config.station.codec, "OGG")) {
+                _fullbitrate->setFormat(BF_OGG);
+              } else {
+                _fullbitrate->setFormat(BF_UNCNOWN);
+              }
+            }
           } 
         }
         break;

@@ -132,6 +132,7 @@ struct station_t
   char name[BUFLEN];
   char url[BUFLEN];
   char title[BUFLEN];
+  char codec[BUFLEN];
   uint16_t bitrate;
   int  ovol;
 };
