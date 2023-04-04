@@ -190,9 +190,17 @@ void encodersLoop(yoEncoder* enc, bool first) {
     }
 #else
     if (first) {
+#if ENC_BTNL != 255 && ENC2_BTNL != 255
+      if (display.mode() == STATIONS) {
+        display.putRequest(NEWMODE, VOL);
+        while (display.mode() != VOL) {
+          delay(10);
+        }
+      }
+#endif
       controlsEvent(encoderDelta > 0, encoderDelta);
     } else {
-      if (encBtnState == HIGH && display.mode() == PLAYER) {
+      if (encBtnState == HIGH && display.mode() != STATIONS) {
           display.putRequest(NEWMODE, STATIONS);
           while (display.mode() != STATIONS) {
               delay(10);

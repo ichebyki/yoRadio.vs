@@ -25,7 +25,7 @@
 
 #define BTN_MODE			14
 
-#define ENC_BTNR			35
+#define ENC_BTNR			12
 #define ENC_BTNL			33
 #define ENC_BTNB			13
 #define ENC_INTERNALPULLUP	true
