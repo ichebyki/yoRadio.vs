@@ -31,9 +31,9 @@
 #define ENC_INTERNALPULLUP	true
 #define ENC_HALFQUARD       false /*  (true, false, 255) Experiment  with it */
 
-#define ENC2_BTNR           36
-#define ENC2_BTNL           34
-#define ENC2_BTNB           39
+#define ENC2_BTNR           36 // need external resistor for pullup
+#define ENC2_BTNL           34 // need external resistor for pullup
+#define ENC2_BTNB           39 // need external resistor for pullup
 #define ENC2_INTERNALPULLUP true
 #define ENC2_HALFQUARD      false          /*  Experiment  with it */
 
@@ -41,8 +41,9 @@
 #define TS_CS			    4
 
 // ex-options
-#define VOLUME_STEP   3 // 1 is default
-#define BUFLEN      190
-#define BITRATE_FULL  1
+#define VOLUME_STEP           1 // 1 is default
+#define BUFLEN              190
+#define BITRATE_FULL          1
+#define VOLUME_LOGARITHMIC true // logarithmic volume change
 
 #endif

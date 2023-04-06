@@ -198,6 +198,21 @@ void encodersLoop(yoEncoder* enc, bool first) {
         }
       }
 #endif
+#ifdef VOLUME_LOGARITHMIC
+      encoderDelta = encoderDelta > 0 ? 1 : -1;
+      float encoderDeltaLog2 = config.store.volume == 0
+              ? encoderDelta
+              : (encoderDelta > 0 ? config.store.volume
+                                  : config.store.volume / -2.0) /
+                    4.0
+#ifdef VOLUME_STEP
+                     / VOLUME_STEP
+#endif
+                     ;
+      if ((int8_t)encoderDeltaLog2 != 0) {
+        encoderDelta = (int8_t)encoderDeltaLog2;
+      }
+#endif
       controlsEvent(encoderDelta > 0, encoderDelta);
     } else {
       if (encBtnState == HIGH && display.mode() != STATIONS) {
