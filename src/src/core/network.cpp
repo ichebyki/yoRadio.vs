@@ -1,5 +1,6 @@
 #include "network.h"
 #include "WiFi.h"
+#include <WiFiMulti.h>
 #include "display.h"
 #include "options.h"
 #include "config.h"
@@ -8,6 +9,7 @@
 #include "player.h"
 
 Network network;
+WiFiMulti wifiMulti;
 
 TaskHandle_t syncTaskHandle;
 bool getWeather(char *wstr);
@@ -51,6 +53,80 @@ void ticks() {
 }
 
 #define DBGAP false
+/***********************************************************************************************************************
+ *                                         C O N N E C T   TO   W I F I *
+ ***********************************************************************************************************************/
+bool connectToWiFi() {
+  String s_ssid = "", s_password = "", s_info = "";
+  wifiMulti.addAP("yyyy", "yyyy"); // SSID and PW in code
+  WiFi.setHostname("yoRadio.vs");
+  if (psramFound())
+    WiFi.useStaticBuffers(true);
+  File file = SPIFFS.open(SSIDS_PATH,
+                          "r"); // try credentials
+  if (file) {
+    String str = "";
+    while (file.available()) {
+      str = file.readStringUntil('\n'); // read the line
+      if (str[0] == '*')
+        continue; // ignore this, goto next line
+      if (str[0] == '\n')
+        continue; // empty line
+      if (str[0] == ' ')
+        continue; // space as first char
+      if (str.indexOf('\t') < 0)
+        continue; // no tab
+      str += "\t";
+      uint p = 0, q = 0;
+      s_ssid = "", s_password = "", s_info = "";
+      for (int i = 0; i < str.length(); i++) {
+        if (str[i] == '\t') {
+          if (p == 0)
+            s_ssid = str.substring(q, i);
+          if (p == 1)
+            s_password = str.substring(q, i);
+          if (p == 2)
+            s_info = str.substring(q, i);
+          p++;
+          i++;
+          q = i;
+        }
+      }
+      // log_i("s_ssid=%s  s_password=%s  s_info=%s", s_ssid.c_str(),
+      // s_password.c_str(), s_info.c_str());
+      if (s_ssid == "")
+        continue;
+      if (s_password == "")
+        continue;
+      wifiMulti.addAP(s_ssid.c_str(), s_password.c_str());
+    }
+    file.close();
+  }
+
+  // WiFi.begin(ssid, password);
+  wifiMulti.run();
+
+  if (WiFi.isConnected()) {
+    // Connected to WiFi network
+    Serial.println("Connected to WiFi");
+
+    // Wait for connection
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.print(".");
+    }
+    Serial.println("");
+    Serial.print("Connected to ");
+    Serial.println(WiFi.SSID());
+    Serial.print("IP address: ");
+    Serial.println(WiFi.localIP());
+    WiFi.setSleep(false);
+    return true;
+  }
+
+  Serial.println("WiFi credentials are not correct or other problem\n");
+  return false; // can't connect to any network
+}
 
 void Network::begin() {
   BOOTLOG("network.begin");
@@ -65,34 +141,13 @@ void Network::begin() {
   byte startedls = ls;
   byte errcnt = 0;
   WiFi.mode(WIFI_STA);
-  while (true) {
-    Serial.printf("##[BOOT]#\tAttempt to connect to %s\n", config.ssids[ls].ssid);
-    Serial.print("##[BOOT]#\t");
-    display.putRequest(BOOTSTRING, ls);
-    WiFi.begin(config.ssids[ls].ssid, config.ssids[ls].password);
-    while (WiFi.status() != WL_CONNECTED) {
-      Serial.print(".");
-      delay(500);
-      if(LED_BUILTIN!=255) digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
-      errcnt++;
-      if (errcnt > 16) {
-        errcnt = 0;
-        ls++;
-        if (ls > config.ssidsCount - 1) ls = 0;
-        Serial.println();
-        break;
-      }
-    }
-    if (WiFi.status() != WL_CONNECTED && ls == startedls) {
-      raiseSoftAP();
-      Serial.println("##[BOOT]#\tdone");
-      return;
-    }
-    if (WiFi.status() == WL_CONNECTED) {
-      config.setLastSSID(ls + 1);
-      break; // отстрелялись
-    }
+
+  // Connect to the best WiFi
+  if (!connectToWiFi()) {
+    raiseSoftAP();
+    return;
   }
+
   Serial.println(".");
   Serial.println("##[BOOT]#\tdone");
   if(LED_BUILTIN!=255) digitalWrite(LED_BUILTIN, LOW);
